@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:dubbo="http://code.alibabatech.com/schema/dubbo"
+	xsi:schemaLocation="http://www.springframework.org/schema/beans
+	http://www.springframework.org/schema/beans/spring-beans-2.5.xsd
+	http://code.alibabatech.com/schema/dubbo 
+	http://code.alibabatech.com/schema/dubbo/dubbo.xsd">
+	
+	<!--  dubbo:registry 标签一些属性的说明：
+      1）register是否向此注册中心注册服务，如果设为false，将只订阅，不注册。
+      2）check注册中心不存在时，是否报错。
+      3）subscribe是否向此注册中心订阅服务，如果设为false，将只注册，不订阅。
+      4）timeout注册中心请求超时时间(毫秒)。 -->
+	
+<dubbo:application name="test-demo"/>
+	<dubbo:registry protocol="zookeeper" address="zookeeper://127.0.0.1:2181"/>
+	<dubbo:protocol name="dubbo" port="17201" />
+	
+	<dubbo:consumer timeout="5000" check="false"/>
+	<dubbo:provider timeout="5000" delay="-1" />
+	<import resource="dubbo-provider.xml"/>
+	<import resource="dubbo-consumer.xml"/>
+	</beans>
