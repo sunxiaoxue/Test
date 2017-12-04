@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="org.seckill.dao.SuccesKilledDao">
+   <!-- 插入购买明细，可过滤重复，，设计主键的时候用的是联合主键   主键冲突报错 添加 ignore -->
+    <insert id="insertSeckilled">
+        insert ignore into success_killed (seckill_id,user_phone,state)
+       values(#{seckilled},#{userPhone},0)
+
+    </insert>
+
+
+<select id="queryByIdWithSeckill" resultType="SuccesKilled">
+    <!--根据Id查询SuccesKilled并携带秒杀商品对象实体seckill
+    如果告诉mybatis把结果映射到SuccesKilled同时映射seckill属性
+    -->
+    <!--mybatis可以自由控制sql-->
+    select
+    sk.seckill_id,
+    sk.user_phone,
+    sk.create_time,
+    sk.state,
+    s.seckill_id "seckill.seckill_id",
+    s.name "seckill.name",
+    s.number "seckill.number",
+    s.start_time "seckill.start_time",
+    s.end_time "seckill.end_time",
+    s.create_time "seckill.create_time"
+    from success_killed sk
+    inner join seckill s on sk.seckill_id=s.seckill_id
+    where sk.seckill_id=#{seckillId} and sk.user_phone=#{userPhone}
+
+</select>
+</mapper>
